@@ -1,0 +1,35 @@
+interface IVehicle {
+  start(): void;
+}
+
+class Car implements IVehicle {
+  start(): void {
+    console.log("Car is starting");
+  }
+}
+
+class Bike implements IVehicle {
+  start(): void {
+    console.log("Bike is starting");
+  }
+}
+
+class Driver {
+  private vehicle: IVehicle;
+
+  constructor(vehicle: IVehicle) {
+    this.vehicle = vehicle;
+  }
+
+  drive(): void {
+    this.vehicle.start();
+    console.log("Driving...");
+  }
+}
+
+// Run
+const driver1 = new Driver(new Car());
+driver1.drive();
+
+const driver2 = new Driver(new Bike());
+driver2.drive();
