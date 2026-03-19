@@ -1,0 +1,27 @@
+class TaskService {
+  createTask(name: string): void {
+    console.log(`Creating task: ${name}`);
+  }
+}
+
+class EmailService {
+  sendEmail(to: string): void {
+    console.log(`Sending email to ${to}`);
+  }
+}
+
+// Manager class that uses both services
+class TaskManager {
+  private taskService: TaskService;
+  private emailService: EmailService;
+
+  constructor() {
+    this.taskService = new TaskService();
+    this.emailService = new EmailService();
+  }
+
+  createTaskAndNotify(name: string, email: string): void {
+    this.taskService.createTask(name);
+    this.emailService.sendEmail(email);
+  }
+}
