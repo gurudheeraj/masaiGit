@@ -1,0 +1,23 @@
+class Animal {
+  makeSound(): void {
+    console.log("Some sound");
+  }
+}
+
+class Dog extends Animal {
+  makeSound(): void {
+    console.log("Bark!");
+  }
+}
+
+// Polymorphic function
+function makeAnimalSound(animal: Animal): void {
+  animal.makeSound();
+}
+
+// Usage
+const animal = new Animal();
+const dog = new Dog();
+
+makeAnimalSound(animal); // Some sound
+makeAnimalSound(dog);    // Bark!
