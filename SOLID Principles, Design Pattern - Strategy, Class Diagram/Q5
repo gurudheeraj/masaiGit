@@ -1,0 +1,30 @@
+// Step 1: Interface
+interface Database {
+  save(data: string): void;
+}
+
+// Step 2: Implementations
+class MySQLService implements Database {
+  save(data: string): void {
+    console.log("Saving to MySQL:", data);
+  }
+}
+
+class MongoDBService implements Database {
+  save(data: string): void {
+    console.log("Saving to MongoDB:", data);
+  }
+}
+
+// Step 3: Inject dependency
+class UserService {
+  constructor(private db: Database) {}
+
+  register(user: string): void {
+    this.db.save(user);
+  }
+}
+
+// Usage
+const userService = new UserService(new MySQLService());
+userService.register("Dheeraj");
