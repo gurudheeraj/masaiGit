@@ -1,0 +1,20 @@
+class Bird {
+  eat(): void {
+    console.log("Eating...");
+  }
+}
+
+// Flying capability separated
+interface Flyable {
+  fly(): void;
+}
+
+class Sparrow extends Bird implements Flyable {
+  fly(): void {
+    console.log("Flying...");
+  }
+}
+
+class Ostrich extends Bird {
+  // No fly method
+}
