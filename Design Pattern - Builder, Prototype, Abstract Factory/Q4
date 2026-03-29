@@ -1,0 +1,51 @@
+// Prototype Interface
+interface Prototype<T> {
+  clone(): T;
+}
+
+// Book class
+class Book implements Prototype<Book> {
+  title: string;
+  author: string;
+  reviews: string[];
+
+  constructor(title: string, author: string, reviews: string[]) {
+    this.title = title;
+    this.author = author;
+    this.reviews = reviews;
+  }
+
+  // FIXED clone method (Deep Copy)
+  clone(): Book {
+    // Create a new array (deep copy)
+    const copiedReviews = [...this.reviews];
+
+    return new Book(this.title, this.author, copiedReviews);
+  }
+
+  printDetails(): void {
+    console.log("Title:", this.title);
+    console.log("Author:", this.author);
+    console.log("Reviews:", this.reviews);
+    console.log("----------------------");
+  }
+}
+
+// Main function
+function main() {
+  const reviews = ["Great book!", "Must read!"];
+
+  const original = new Book("Design Patterns", "GoF", reviews);
+
+  // Clone
+  const clone = original.clone();
+
+  // Modify clone
+  clone.reviews.push("New review in clone");
+
+  // Print both
+  original.printDetails();
+  clone.printDetails();
+}
+
+main();
