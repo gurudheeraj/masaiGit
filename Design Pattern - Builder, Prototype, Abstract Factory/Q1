@@ -1,0 +1,77 @@
+// Pizza class
+class Pizza {
+  size: string;
+  cheese: boolean;
+  pepperoni: boolean;
+  mushrooms: boolean;
+
+  constructor(
+    size: string,
+    cheese: boolean,
+    pepperoni: boolean,
+    mushrooms: boolean
+  ) {
+    this.size = size;
+    this.cheese = cheese;
+    this.pepperoni = pepperoni;
+    this.mushrooms = mushrooms;
+  }
+
+  printDetails(): void {
+    console.log("Pizza Details:");
+    console.log(`Size: ${this.size}`);
+    console.log(`Cheese: ${this.cheese}`);
+    console.log(`Pepperoni: ${this.pepperoni}`);
+    console.log(`Mushrooms: ${this.mushrooms}`);
+  }
+}
+
+// PizzaBuilder class
+class PizzaBuilder {
+  private size: string = "small";
+  private cheese: boolean = false;
+  private pepperoni: boolean = false;
+  private mushrooms: boolean = false;
+
+  setSize(size: string): PizzaBuilder {
+    this.size = size;
+    return this;
+  }
+
+  addCheese(): PizzaBuilder {
+    this.cheese = true;
+    return this;
+  }
+
+  addPepperoni(): PizzaBuilder {
+    this.pepperoni = true;
+    return this;
+  }
+
+  addMushrooms(): PizzaBuilder {
+    this.mushrooms = true;
+    return this;
+  }
+
+  build(): Pizza {
+    return new Pizza(
+      this.size,
+      this.cheese,
+      this.pepperoni,
+      this.mushrooms
+    );
+  }
+}
+
+// Main function
+function main() {
+  const pizza = new PizzaBuilder()
+    .setSize("large")
+    .addCheese()
+    .addMushrooms()
+    .build();
+
+  pizza.printDetails();
+}
+
+main();
