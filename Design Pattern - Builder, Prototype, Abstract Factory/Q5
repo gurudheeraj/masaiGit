@@ -1,0 +1,70 @@
+// Product Interface
+interface Device {
+  specifications(): void;
+}
+
+// Concrete Products - Apple
+class AppleLaptop implements Device {
+  specifications(): void {
+    console.log("Apple Laptop: MacBook Pro, M2 Chip, 16GB RAM");
+  }
+}
+
+class ApplePhone implements Device {
+  specifications(): void {
+    console.log("Apple Phone: iPhone 15, A16 Bionic, 128GB Storage");
+  }
+}
+
+// Concrete Products - Samsung
+class SamsungLaptop implements Device {
+  specifications(): void {
+    console.log("Samsung Laptop: Galaxy Book3, Intel i7, 16GB RAM");
+  }
+}
+
+class SamsungPhone implements Device {
+  specifications(): void {
+    console.log("Samsung Phone: Galaxy S23, Snapdragon, 128GB Storage");
+  }
+}
+
+// Abstract Factory
+interface DeviceFactory {
+  createDevice(type: string): Device;
+}
+
+// Concrete Factory - Apple
+class AppleFactory implements DeviceFactory {
+  createDevice(type: string): Device {
+    if (type === "laptop") return new AppleLaptop();
+    if (type === "phone") return new ApplePhone();
+    throw new Error("Invalid device type");
+  }
+}
+
+// Concrete Factory - Samsung
+class SamsungFactory implements DeviceFactory {
+  createDevice(type: string): Device {
+    if (type === "laptop") return new SamsungLaptop();
+    if (type === "phone") return new SamsungPhone();
+    throw new Error("Invalid device type");
+  }
+}
+
+// Main function
+function main() {
+  // Apple Factory
+  const appleFactory: DeviceFactory = new AppleFactory();
+  const appleLaptop = appleFactory.createDevice("laptop");
+
+  // Samsung Factory
+  const samsungFactory: DeviceFactory = new SamsungFactory();
+  const samsungPhone = samsungFactory.createDevice("phone");
+
+  // Print specifications
+  appleLaptop.specifications();
+  samsungPhone.specifications();
+}
+
+main();
