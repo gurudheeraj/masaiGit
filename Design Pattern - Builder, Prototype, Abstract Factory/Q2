@@ -1,0 +1,46 @@
+// Prototype Interface
+interface Prototype<T> {
+  clone(): T;
+}
+
+// GameCharacter class implementing Prototype
+class GameCharacter implements Prototype<GameCharacter> {
+  name: string;
+  level: number;
+  weapon: string;
+
+  constructor(name: string, level: number, weapon: string) {
+    this.name = name;
+    this.level = level;
+    this.weapon = weapon;
+  }
+
+  // Clone method (Prototype Pattern core)
+  clone(): GameCharacter {
+    return new GameCharacter(this.name, this.level, this.weapon);
+  }
+
+  printDetails(): void {
+    console.log("Character Details:");
+    console.log(`Name: ${this.name}`);
+    console.log(`Level: ${this.level}`);
+    console.log(`Weapon: ${this.weapon}`);
+    console.log("----------------------");
+  }
+}
+
+// Main function
+function main() {
+  // Step 1: Create original character
+  const warrior = new GameCharacter("Warrior", 10, "Sword");
+
+  // Step 2: Clone the character
+  const warriorClone = warrior.clone();
+  warriorClone.name = "Warrior Clone";
+
+  // Step 3: Print both to show they are separate instances
+  warrior.printDetails();
+  warriorClone.printDetails();
+}
+
+main();
