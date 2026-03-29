@@ -1,0 +1,108 @@
+// Product: Car
+class Car {
+  brand: string;
+  engine: string;
+  color: string;
+  sunroof: boolean;
+  automaticTransmission: boolean;
+
+  constructor(
+    brand: string,
+    engine: string,
+    color: string,
+    sunroof: boolean,
+    automaticTransmission: boolean
+  ) {
+    this.brand = brand;
+    this.engine = engine;
+    this.color = color;
+    this.sunroof = sunroof;
+    this.automaticTransmission = automaticTransmission;
+  }
+
+  printDetails(): void {
+    console.log("Car Details:");
+    console.log(`Brand: ${this.brand}`);
+    console.log(`Engine: ${this.engine}`);
+    console.log(`Color: ${this.color}`);
+    console.log(`Sunroof: ${this.sunroof}`);
+    console.log(
+      `Automatic Transmission: ${this.automaticTransmission}`
+    );
+  }
+}
+
+// Builder Interface
+interface CarBuilder {
+  setBrand(brand: string): void;
+  setEngine(engine: string): void;
+  setColor(color: string): void;
+  setSunroof(sunroof: boolean): void;
+  setAutomaticTransmission(isAutomatic: boolean): void;
+  getResult(): Car;
+}
+
+// Concrete Builder
+class TeslaBuilder implements CarBuilder {
+  private brand!: string;
+  private engine!: string;
+  private color!: string;
+  private sunroof: boolean = false;
+  private automaticTransmission: boolean = false;
+
+  setBrand(brand: string): void {
+    this.brand = brand;
+  }
+
+  setEngine(engine: string): void {
+    this.engine = engine;
+  }
+
+  setColor(color: string): void {
+    this.color = color;
+  }
+
+  setSunroof(sunroof: boolean): void {
+    this.sunroof = sunroof;
+  }
+
+  setAutomaticTransmission(isAutomatic: boolean): void {
+    this.automaticTransmission = isAutomatic;
+  }
+
+  getResult(): Car {
+    return new Car(
+      this.brand,
+      this.engine,
+      this.color,
+      this.sunroof,
+      this.automaticTransmission
+    );
+  }
+}
+
+// Director
+class Director {
+  constructTeslaModelS(builder: CarBuilder): void {
+    builder.setBrand("Tesla Model S");
+    builder.setEngine("Electric");
+    builder.setColor("Black");
+    builder.setSunroof(true);
+    builder.setAutomaticTransmission(true);
+  }
+}
+
+// Main function
+function main() {
+  const builder = new TeslaBuilder();
+  const director = new Director();
+
+  // Director controls construction
+  director.constructTeslaModelS(builder);
+
+  const car = builder.getResult();
+
+  car.printDetails();
+}
+
+main();
