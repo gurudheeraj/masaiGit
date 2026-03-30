@@ -1,0 +1,139 @@
+class Player {
+  name: string;
+  symbol: string;
+
+  constructor(name: string, symbol: string) {
+    if (symbol === "_") throw new Error("Symbol cannot be '_'");
+
+    this.name = name;
+    this.symbol = symbol;
+  }
+}
+
+class Board {
+  grid: string[][];
+
+  constructor() {
+    this.grid = Array(3)
+      .fill(null)
+      .map(() => Array(3).fill("_"));
+  }
+
+  printBoard() {
+    console.log("\n   1   2   3");
+    const rows = ["A", "B", "C"];
+    for (let i = 0; i < 3; i++) {
+      console.log(`${rows[i]}  ${this.grid[i].join(" | ")}`);
+    }
+    console.log();
+  }
+
+  isCellEmpty(row: number, col: number): boolean {
+    return this.grid[row][col] === "_";
+  }
+
+  setCell(row: number, col: number, symbol: string) {
+    this.grid[row][col] = symbol;
+  }
+
+  isFull(): boolean {
+    return this.grid.flat().every(cell => cell !== "_");
+  }
+}
+
+class Game {
+  board: Board;
+  players: Player[];
+  currentPlayerIndex: number;
+  lockedCenterBy: string | null;
+
+  constructor(player1: Player, player2: Player) {
+    if (player1.symbol === player2.symbol) {
+      throw new Error("Players cannot have same symbol");
+    }
+
+    this.board = new Board();
+    this.players = [player1, player2];
+    this.currentPlayerIndex = 0;
+    this.lockedCenterBy = null;
+  }
+
+  parseInput(input: string): [number, number] {
+    if (!/^[A-C][1-3]$/.test(input)) {
+      throw new Error("Invalid input format");
+    }
+
+    const rowMap: any = { A: 0, B: 1, C: 2 };
+    return [rowMap[input[0]], Number(input[1]) - 1];
+  }
+
+  checkWin(symbol: string): boolean {
+    const g = this.board.grid;
+
+    // Rows & Columns
+    for (let i = 0; i < 3; i++) {
+      if (g[i].every(cell => cell === symbol)) return true;
+      if (g.map(row => row[i]).every(cell => cell === symbol)) return true;
+    }
+
+    // Diagonals
+    if ([0, 1, 2].every(i => g[i][i] === symbol)) return true;
+    if ([0, 1, 2].every(i => g[i][2 - i] === symbol)) return true;
+
+    return false;
+  }
+
+  applyDiagonalLock(player: Player) {
+    const g = this.board.grid;
+    const sym = player.symbol;
+
+    // Check corners
+    if (
+      (g[0][0] === sym && g[2][2] === sym) ||
+      (g[0][2] === sym && g[2][0] === sym)
+    ) {
+      if (g[1][1] === "_") {
+        this.lockedCenterBy = sym;
+        console.log(`⚠ Center B2 locked by ${player.name}`);
+      }
+    }
+  }
+
+  makeMove(input: string) {
+    const player = this.players[this.currentPlayerIndex];
+    const [row, col] = this.parseInput(input);
+
+    // Check lock
+    if (
+      row === 1 &&
+      col === 1 &&
+      this.lockedCenterBy &&
+      this.lockedCenterBy !== player.symbol
+    ) {
+      throw new Error("Center is locked for opponent!");
+    }
+
+    if (!this.board.isCellEmpty(row, col)) {
+      throw new Error("Cell already filled");
+    }
+
+    this.board.setCell(row, col, player.symbol);
+
+    // Apply diagonal lock
+    this.applyDiagonalLock(player);
+
+    if (this.checkWin(player.symbol)) {
+      this.board.printBoard();
+      console.log(`🎉 ${player.name} wins!`);
+      process.exit();
+    }
+
+    if (this.board.isFull()) {
+      this.board.printBoard();
+      console.log("🤝 It's a draw!");
+      process.exit();
+    }
+
+    this.currentPlayerIndex = 1 - this.currentPlayerIndex;
+  }
+}
